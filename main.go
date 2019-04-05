@@ -17,8 +17,8 @@ func handleFunctions()  {
 	router.HandleFunc("/", hello).Methods("GET")
 
 	router.HandleFunc("/users", AllUsers).Methods("GET")
-	router.HandleFunc("/user/{name}/{password}", GetUser).Methods("POST") // user data
-	router.HandleFunc("/user/{name}/{email}", NewUser).Methods("POST") // creating new user
+	router.HandleFunc("/login/{name}/{password}", GetUser).Methods("POST") // user data
+	router.HandleFunc("/register/{name}/{email}", NewUser).Methods("POST") // creating new user
 	router.HandleFunc("/user/{id}", DeleteUser).Methods("DELETE") // deleting user
 
 	router.HandleFunc("/my/lists", GetMyLists).Methods("GET")

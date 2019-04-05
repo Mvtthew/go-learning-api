@@ -26,12 +26,25 @@ func initializeUserMigration() {
 }
 
 func GetUser(w http.ResponseWriter, r *http.Request)  {
-	user, err := checkToken(r)
-	if err != nil {
-		json.NewEncoder(w).Encode(err.Error())
+	db := initDb()
+	defer db.Close()
+
+	vars := mux.Vars(r)
+	name := vars["name"]
+	password := vars["password"]
+
+	var user User
+	db.Where("name = ?", name).Where("password = ?", password).Find(&user)
+
+	if user.ID != 0 {
+		json.NewEncoder(w).Encode(user)
 		return
 	}
-	json.NewEncoder(w).Encode(user)
+
+	response := make(map[string]string)
+	response["message"] = "Bad credentials"
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func AllUsers(w http.ResponseWriter, r *http.Request) {
