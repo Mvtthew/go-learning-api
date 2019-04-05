@@ -24,7 +24,8 @@ func handleFunctions()  {
 	router.HandleFunc("/my/lists", GetMyLists).Methods("GET")
 	router.HandleFunc("/my/lists/{name}", CreateNewList).Methods("POST")
 
-	router.HandleFunc("/my/todos/{listId}", DeleteUser).Methods("DELETE")
+	router.HandleFunc("/my/todos/{listId}", GetMyTodos).Methods("GET")
+	router.HandleFunc("/my/todos/{listId}/{name}", CreateTodo).Methods("POST")
 
 	fmt.Println("REST Server up on port :8082")
 	log.Fatal(http.ListenAndServe(":8082", router))
@@ -34,6 +35,7 @@ func main() {
 
 	initializeUserMigration() // users
 	initializeListMigration() // lists
+	initializeTodoMigration() // todos
 	handleFunctions()
 
 }
