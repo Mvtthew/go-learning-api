@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/mux"
 	"math/rand"
 	"strconv"
-	"errors"
 )
 
 type User struct {
@@ -19,32 +18,20 @@ type User struct {
 	Token    string
 }
 
-func checkToken(r *http.Request) (User, error) {
-	token := r.Header.Get("token")
-
-	var user User
-
-	if token != "" {
-		db := initDb()
-		db.Where("token = ?", token).First(&user)
-		if user.ID == 0 {
-			// bad token response
-			return user, errors.New("user unauthorized")
-		} else {
-			// user authorized
-			return user, nil
-		}
-	}
-
-	// request without token
-	return user, errors.New("header 'token' required")
-}
-
-func initializeMigration() {
+func initializeUserMigration() {
 	db := initDb()
 	defer db.Close()
 
 	db.AutoMigrate(&User{})
+}
+
+func GetUser(w http.ResponseWriter, r *http.Request)  {
+	user, err := checkToken(r)
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
+	json.NewEncoder(w).Encode(user)
 }
 
 func AllUsers(w http.ResponseWriter, r *http.Request) {
