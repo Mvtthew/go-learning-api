@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"fmt"
 	"net/http"
 	"encoding/json"
 	"github.com/gorilla/mux"
